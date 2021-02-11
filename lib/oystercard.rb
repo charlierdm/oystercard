@@ -1,13 +1,15 @@
 require './lib/station'
+require './lib/journey'
 
-class Oystercard
+class OysterCard
+	attr_reader :balance, :entry_station, :exit_station, :journeys
 	LIMIT = 90
 	MIN = 1
-	attr_reader :balance, :entry_station, :exit_station, :journeys
+	STARTING_BALANCE = 0
 
-	def initialize
-		@balance = 0
-		@journeys = [{entry_station: [], exit_station: []} ]
+	def initialize(balance = STARTING_BALANCE)
+		@balance = balance
+		@journeys = []
 	end
 
 	def top_up(amount)
@@ -20,14 +22,14 @@ class Oystercard
 	end
 
 	def touch_in(entry_station)
+		add_empty_journey
 		fail "Balance not sufficient" if @balance < MIN
 		@journeys.last[:entry_station] += [entry_station.name, entry_station.zone]
 	end
 
 	def touch_out(exit_station)
+		deduct
 		@journeys.last[:exit_station] += [exit_station.name, exit_station.zone]
-		add_empty_journey
-		deduct(MIN)
 	end
 
 	private
