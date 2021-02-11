@@ -1,7 +1,7 @@
 require './lib/station'
 require './lib/journey'
 
-class Oystercard
+class OysterCard
 	LIMIT = 90
 	MIN = 1
 	attr_reader :balance, :entry_station, :exit_station, :journeys
