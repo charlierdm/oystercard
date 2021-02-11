@@ -21,10 +21,10 @@ class OysterCard
 		@latest_journey != {}
 	end
 
-	def touch_in(entry_station)
-		#Journey.new(Station.new("Bank", 1))
+	def touch_in(name, zone)
+		journey = Journey.new.start(name, zone)
 		fail "Balance not sufficient" if @balance < MIN
-		@latest_journey[:entry] = entry_station
+		@latest_journey[:entry] = journey
 	end
 
 	def touch_out(exit_station)

@@ -21,7 +21,7 @@ def start(name, zone)
 end
 
 def end(name, zone)
-  @end_station =
+
 end
 
 def fare
