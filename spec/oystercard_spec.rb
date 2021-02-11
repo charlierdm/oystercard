@@ -1,8 +1,8 @@
 require 'oystercard'
 
-describe Oystercard do
-	let (:max) { Oystercard::LIMIT }
-	let (:min) { Oystercard::MIN}
+describe OysterCard do
+	let (:max) { OysterCard::LIMIT }
+	let (:min) { OysterCard::MIN}
 	let (:station) { double :station }
 	let (:journey) { {entry: station, exit: station} }
 

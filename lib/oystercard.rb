@@ -1,4 +1,4 @@
-class Oystercard
+class OysterCard
 	LIMIT = 90
 	MIN = 1
 	attr_reader :balance, :journey_log, :latest_journey
@@ -24,10 +24,10 @@ class Oystercard
 	end
 
 	def touch_out(exit_station)
-		deduct(MIN)
 		@latest_journey[:exit] = exit_station
 		record_journey
 		@latest_journey = {}
+		deduct(MIN)
 	end
 
 	private
