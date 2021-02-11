@@ -1,3 +1,6 @@
+require './lib/station'
+require './lib/journey'
+
 class OysterCard
 	LIMIT = 90
 	MIN = 1
