@@ -1,7 +1,7 @@
 class Oystercard
 	LIMIT = 90
 	MIN = 1
-	attr_reader :balance, :entry_station, :exit_station, :journey_log, :latest_journey
+	attr_reader :balance, :journey_log, :latest_journey
 
 	def initialize
 		@balance = 0
@@ -15,25 +15,28 @@ class Oystercard
 	end
 
 	def in_journey?
-		!!entry_station
+		@latest_journey != {}
 	end
 
 	def touch_in(entry_station)
 		fail "Balance not sufficient" if @balance < MIN
-		@entry_station = entry_station
-		@latest_journey[:entry] = @entry_station
+		@latest_journey[:entry] = entry_station
 	end
 
 	def touch_out(exit_station)
 		deduct(MIN)
-		@exit_station = exit_station
-		@latest_journey[:exit] = @exit_station
-		@entry_station = nil
+		@latest_journey[:exit] = exit_station
+		record_journey
+		@latest_journey = {}
 	end
 
 	private
 	def deduct(fare)
 		@balance -= fare
+	end
+
+	def record_journey
+		@journey_log.push(@latest_journey)
 	end
 
 end

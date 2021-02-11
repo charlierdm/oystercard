@@ -16,13 +16,6 @@ describe Oystercard do
 		end
 	end
 
-		it 'stores the latest journey' do
-			subject.top_up(20)
-			subject.touch_in(station)
-			subject.touch_out(station)
-			expect(subject.latest_journey).to eq(journey)
-		end
-
 	describe '#top_up' do
 		it { is_expected.to respond_to(:top_up).with(1).argument }
 
@@ -45,21 +38,41 @@ describe Oystercard do
 			expect{ subject.touch_in(station) }.to raise_error "Balance not sufficient"
 		end
 
-		it 'stores the entry station' do
-			subject.top_up(max)
-			subject.touch_in(station)
-			expect(subject.entry_station).to eq station
-		end
-
   end
 
 	describe '#touch_out' do
 		it 'can touch out' do
 			subject.top_up(max)
 			subject.touch_in(station)
-			expect { subject.touch_out(station) }.to change{ subject.balance }.by(- min)
 			subject.touch_out(station)
-			expect(subject.entry_station).not_to eq station
+			expect(subject.latest_journey[:entry]).not_to eq station
+		end
+
+		it "deducts the fare from the balance upon touch_out" do
+			subject.top_up(max)
+			subject.touch_in(station)
+			expect { subject.touch_out(station) }.to change{ subject.balance }.by(- min)
 		end
 	end
+
+context "stores information about the journey" do
+	before(:each) do
+		subject.top_up(max)
+		subject.touch_in(station)
+	end
+
+	it 'stores the entry station' do
+		expect(subject.latest_journey[:entry]).to eq station
+	end
+
+	it 'stores the exit station' do
+		subject.touch_out(station)
+		expect(subject.journey_log[-1][:exit]).to eq(station)
+	end
+
+	it 'stores the latest journey' do
+		expect{subject.touch_out(station)}.to change{subject.journey_log.count}.by(1)
+	end
+
+end
 end
