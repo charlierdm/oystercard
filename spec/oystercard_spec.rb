@@ -4,6 +4,7 @@ describe Oystercard do
 	let (:max) { Oystercard::LIMIT }
 	let (:min) { Oystercard::MIN}
 	let (:station) { double :station }
+	let (:journey) { {entry: station, exit: station} }
 
 	describe '#initialize' do
 		it 'should have a default balance of zero' do
@@ -14,6 +15,13 @@ describe Oystercard do
 			expect(subject.journey_log).to eq([])
 		end
 	end
+
+		it 'stores the latest journey' do
+			subject.top_up(20)
+			subject.touch_in(station)
+			subject.touch_out(station)
+			expect(subject.latest_journey).to eq(journey)
+		end
 
 	describe '#top_up' do
 		it { is_expected.to respond_to(:top_up).with(1).argument }
